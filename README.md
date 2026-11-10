@@ -5,12 +5,12 @@
 **A hardened, session-based password protection extension for Instagram Web**
 
 ![Manifest V3](https://img.shields.io/badge/Chrome%20Extension-Manifest%20V3-4285F4?logo=googlechrome&logoColor=white)
-![Crypto](https://img.shields.io/badge/Crypto-PBKDF2--SHA256%20(600k)-e1306c)
+![Crypto](<https://img.shields.io/badge/Crypto-PBKDF2--SHA256%20(600k)-e1306c>)
 ![Offline](https://img.shields.io/badge/Backend-100%25%20Offline-52c41a)
 ![Tests](https://img.shields.io/badge/Tests-58%2F58%20Passing-success)
 [![GitHub Repo](https://img.shields.io/badge/GitHub-AliGohar2151%2FInstaLockExt-181717?logo=github)](https://github.com/AliGohar2151/InstaLockExt)
 
-*Protect your Instagram direct messages, feed, and Reels on shared or unattended computers—completely offline, with zero external tracking or backend servers.*
+_Protect your Instagram direct messages, feed, and Reels on shared or unattended computers—completely offline, with zero external tracking or backend servers._
 
 </div>
 
@@ -33,11 +33,11 @@
 
 **Instagram Lock** secures Instagram Web (`https://*.instagram.com/*`) behind a master password. Authenticate once per browser session, and Instagram remains unlocked until:
 
-1. **Browser Close / Restart** — ephemeral session state resets automatically via `chrome.storage.session` and `chrome.runtime.onStartup`.
-2. **Workstation Screen Lock** — locking your OS (`Win + L` / `Cmd + Ctrl + Q`) triggers immediate lockdown via `chrome.idle`.
-3. **Inactivity Timeout** — automatically locks all open Instagram tabs after `1`, `5`, `10`, `15`, or `30` minutes of inactivity.
-4. **All Instagram Tabs Closed** — optional **Lock on Reopen** mode locks immediately when the last Instagram tab closes or navigates away.
-5. **Manual Lock / Shortcut** — click **Lock Instagram Now** in the popup or press **`Alt + Shift + L`** anytime.
+1. **Browser Close / Restart** - ephemeral session state resets automatically via `chrome.storage.session` and `chrome.runtime.onStartup`.
+2. **Workstation Screen Lock** - locking your OS (`Win + L` / `Cmd + Ctrl + Q`) triggers immediate lockdown via `chrome.idle`.
+3. **Inactivity Timeout** - automatically locks all open Instagram tabs after `1`, `5`, `10`, `15`, or `30` minutes of inactivity.
+4. **All Instagram Tabs Closed** - optional **Lock on Reopen** mode locks immediately when the last Instagram tab closes or navigates away.
+5. **Manual Lock / Shortcut** - click **Lock Instagram Now** in the popup or press **`Alt + Shift + L`** anytime.
 
 ---
 
@@ -47,7 +47,7 @@
 - **Closed Shadow DOM Lock Screen**: Encapsulated in a `mode: 'closed'` Shadow DOM container with `subtree: true` DOM tamper defense, CSS visibility enforcement, and WCAG 2.1 AA focus trapping.
 - **OWASP-Aligned PBKDF2 Cryptography**: Uses `600,000` iterations of PBKDF2-HMAC-SHA256 with a 128-bit CSPRNG salt, transparent 100k-to-600k legacy hash upgrades, and mutex-serialized verification.
 - **Selective Protection Modes**:
-  - **Full Site Lock** *(Default)*: Protects all of Instagram Web.
+  - **Full Site Lock** _(Default)_: Protects all of Instagram Web.
   - **Reels & Explore Blocker**: Locks `/reels/*` and `/explore/*` to curb distractions while keeping Direct Messages accessible.
   - **DM Privacy Lock**: Locks `/direct/*` messages while allowing public feed browsing.
 - **Direct Popup Unlock & Live Sync**: Unlock, lock, or toggle **Lock on Reopen** straight from the toolbar popup with real-time `chrome.storage.onChanged` updates across all tabs.
@@ -95,15 +95,15 @@ InstaLockExt/
 
 ## Security & Cryptography
 
-| Security Control | Implementation Details |
-| :--- | :--- |
-| **Key Derivation** | PBKDF2-HMAC-SHA256, `600,000` iterations, 128-bit `crypto.getRandomValues()` salt, 256-bit key |
-| **Password Policy** | `8–128` characters, minimum 2 character classes (rejects oversized inputs to prevent CPU DoS) |
-| **Verification** | Constant-time `timingSafeEqual()` serialized under an async mutex queue (prevents TOCTOU races) |
-| **DOM Isolation** | `attachShadow({ mode: 'closed' })` + `subtree: true` `MutationObserver` visibility guard |
+| Security Control      | Implementation Details                                                                                                                                                             |
+| :-------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Key Derivation**    | PBKDF2-HMAC-SHA256, `600,000` iterations, 128-bit `crypto.getRandomValues()` salt, 256-bit key                                                                                     |
+| **Password Policy**   | `8–128` characters, minimum 2 character classes (rejects oversized inputs to prevent CPU DoS)                                                                                      |
+| **Verification**      | Constant-time `timingSafeEqual()` serialized under an async mutex queue (prevents TOCTOU races)                                                                                    |
+| **DOM Isolation**     | `attachShadow({ mode: 'closed' })` + `subtree: true` `MutationObserver` visibility guard                                                                                           |
 | **IPC Authorization** | Admin actions (`SET_PASSWORD`, `CHANGE_PASSWORD`, `UPDATE_SETTINGS`, `GET_SETTINGS`, `GET_AUDIT_LOG`, `REGENERATE_RECOVERY_KEY`) reject callers outside `chrome-extension://<id>/` |
-| **Session Isolation** | `chrome.storage.session` + `"incognito": "split"` + `chrome.runtime.onStartup` lockdown |
-| **Lockout Defense** | Exponential delays (`30s` to `24h`) with `lockoutStartedAt` clock-rollback detection |
+| **Session Isolation** | `chrome.storage.session` + `"incognito": "split"` + `chrome.runtime.onStartup` lockdown                                                                                            |
+| **Lockout Defense**   | Exponential delays (`30s` to `24h`) with `lockoutStartedAt` clock-rollback detection                                                                                               |
 
 ---
 
@@ -136,6 +136,7 @@ node scripts/build-content.mjs
 ## Testing & Verification
 
 ### 1. Automated Unit & Integration Suite (Node.js)
+
 Run all **58 assertions** covering Web Crypto, password policy, route matching, storage schema validation, IPC origin separation, mutex concurrency, exponential lockouts, recovery keys, and inactivity/workstation locking:
 
 ```bash
@@ -143,26 +144,28 @@ node tests/suite.test.js
 ```
 
 Run standalone cryptographic tests (16 assertions):
+
 ```bash
 node tests/crypto.test.js
 ```
 
 ### 2. Browser Verification Runner
+
 Open `tests/runner.html` directly in Chrome to execute the 16 Web Crypto assertions natively inside the browser engine.
 
 ### 3. Manual Verification Matrix
 
-| Scenario | Steps | Expected Result |
-| :--- | :--- | :--- |
-| **First-Run Onboarding** | Load unpacked extension. | `pages/setup.html` opens; enforces 8+ char mixed password and outputs 16-char Recovery Key. |
-| **Anti-FOUC & Lock Screen** | Visit `https://www.instagram.com`. | Blurred veil appears at `document_start`, followed by closed Shadow DOM modal. |
-| **Lockout & Tab Sync** | Enter 3 wrong passwords across Tab A & Tab B. | Shake animation + ARIA alert; `30s` timer syncs across tabs and persists across reloads. |
-| **Direct Popup Unlock** | Click toolbar icon while locked and submit password. | Unlocks all open Instagram tabs directly from the popup. |
-| **Quick Lock Shortcut** | Press `Alt + Shift + L` while unlocked. | Immediately locks every open Instagram tab. |
-| **Workstation OS Lock** | Lock your computer (`Win + L`) and unlock OS. | Instagram tabs lock immediately regardless of elapsed timeout. |
-| **Selective Locking** | Switch Protection Mode to **DM Privacy** in Options. | Feed/Explore stay accessible; opening `/direct/inbox/` triggers the lock screen. |
-| **Lock on Reopen** | Enable **Lock on Reopen** in popup/options, close IG tab, reopen IG. | Session locks immediately on tab closure; reopened tab prompts for password. |
-| **Emergency Recovery** | Click *"Forgot password? Use recovery key"* on lock screen. | Resets master password offline, issues a rotated recovery key, and unlocks. |
+| Scenario                    | Steps                                                                | Expected Result                                                                             |
+| :-------------------------- | :------------------------------------------------------------------- | :------------------------------------------------------------------------------------------ |
+| **First-Run Onboarding**    | Load unpacked extension.                                             | `pages/setup.html` opens; enforces 8+ char mixed password and outputs 16-char Recovery Key. |
+| **Anti-FOUC & Lock Screen** | Visit `https://www.instagram.com`.                                   | Blurred veil appears at `document_start`, followed by closed Shadow DOM modal.              |
+| **Lockout & Tab Sync**      | Enter 3 wrong passwords across Tab A & Tab B.                        | Shake animation + ARIA alert; `30s` timer syncs across tabs and persists across reloads.    |
+| **Direct Popup Unlock**     | Click toolbar icon while locked and submit password.                 | Unlocks all open Instagram tabs directly from the popup.                                    |
+| **Quick Lock Shortcut**     | Press `Alt + Shift + L` while unlocked.                              | Immediately locks every open Instagram tab.                                                 |
+| **Workstation OS Lock**     | Lock your computer (`Win + L`) and unlock OS.                        | Instagram tabs lock immediately regardless of elapsed timeout.                              |
+| **Selective Locking**       | Switch Protection Mode to **DM Privacy** in Options.                 | Feed/Explore stay accessible; opening `/direct/inbox/` triggers the lock screen.            |
+| **Lock on Reopen**          | Enable **Lock on Reopen** in popup/options, close IG tab, reopen IG. | Session locks immediately on tab closure; reopened tab prompts for password.                |
+| **Emergency Recovery**      | Click _"Forgot password? Use recovery key"_ on lock screen.          | Resets master password offline, issues a rotated recovery key, and unlocks.                 |
 
 ---
 
@@ -170,4 +173,4 @@ Open `tests/runner.html` directly in Chrome to execute the 16 Web Crypto asserti
 
 - **Browser Profile Access**: Anyone with physical access to an unlocked OS user session can open `chrome://extensions` to disable or uninstall browser extensions unless restricted by enterprise policy. Always lock your computer (`Win + L` / `Cmd + Ctrl + Q`) when stepping away.
 - **Chrome DevTools**: Users with unrestricted DevTools access can inspect or modify client scripts locally in Developer Mode.
-- **Incognito Mode**: Extensions only run in Incognito windows if *"Allow in Incognito"* is explicitly enabled in `chrome://extensions` details (`"incognito": "split"` isolates normal and private sessions).
+- **Incognito Mode**: Extensions only run in Incognito windows if _"Allow in Incognito"_ is explicitly enabled in `chrome://extensions` details (`"incognito": "split"` isolates normal and private sessions).
