@@ -8,6 +8,7 @@
 ![Crypto](https://img.shields.io/badge/Crypto-PBKDF2--SHA256%20(600k)-e1306c)
 ![Offline](https://img.shields.io/badge/Backend-100%25%20Offline-52c41a)
 ![Tests](https://img.shields.io/badge/Tests-58%2F58%20Passing-success)
+[![GitHub Repo](https://img.shields.io/badge/GitHub-AliGohar2151%2FInstaLockExt-181717?logo=github)](https://github.com/AliGohar2151/InstaLockExt)
 
 *Protect your Instagram direct messages, feed, and Reels on shared or unattended computers—completely offline, with zero external tracking or backend servers.*
 
@@ -110,7 +111,7 @@ InstaLockExt/
 
 1. **Clone this repository**:
    ```bash
-   git clone https://github.com/<your-username>/instagram-lock-extension.git
+   git clone https://github.com/AliGohar2151/InstaLockExt.git
    ```
 2. Open **Google Chrome** (or any Chromium-based browser) and navigate to:
    ```text
