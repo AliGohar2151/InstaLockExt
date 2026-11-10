@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Setup Master Password - Instagram Lock</title>
+  <link rel="stylesheet" href="setup.css">
+</head>
+<body>
+  <div class="setup-container">
+    <div class="setup-card">
+      <div class="brand-header">
+        <div class="icon-ring">
+          <svg viewBox="0 0 24 24" class="lock-svg">
+            <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/>
+          </svg>
+        </div>
+        <h1 class="brand-title">Instagram Lock</h1>
+        <p class="brand-subtitle">Set up your master password to secure your Instagram Web sessions.</p>
+      </div>
+
+      <div id="already-setup-view" class="view hidden">
+        <div class="info-box">
+          <p>A master password is already configured for this extension.</p>
+        </div>
+        <button id="btn-goto-settings" class="btn-primary">Open Settings</button>
+      </div>
+
+      <div id="setup-form-view" class="view">
+        <form id="setup-form" novalidate>
+          <div class="form-group">
+            <label for="new-password">Master Password</label>
+            <div class="input-wrapper">
+              <input type="password" id="new-password" placeholder="Min 8 chars, letters & numbers/symbols" maxlength="128" required autocomplete="new-password">
+              <button type="button" class="btn-toggle-eye" data-target="new-password" aria-label="Toggle password visibility" aria-pressed="false">
+                <svg viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+              </button>
+            </div>
+            <div class="strength-meter">
+              <div class="meter-bar"><div id="strength-fill" class="meter-fill"></div></div>
+              <span id="strength-label" class="strength-text">Password strength</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="confirm-password">Confirm Password</label>
+            <div class="input-wrapper">
+              <input type="password" id="confirm-password" placeholder="Re-enter password" maxlength="128" required autocomplete="new-password">
+              <button type="button" class="btn-toggle-eye" data-target="confirm-password" aria-label="Toggle password visibility" aria-pressed="false">
+                <svg viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <div id="setup-error" class="error-banner hidden" role="alert" aria-live="polite"></div>
+
+          <button type="submit" id="btn-submit-setup" class="btn-primary">
+            <span class="btn-text">Save Password & Lock Session</span>
+            <span class="spinner hidden"></span>
+          </button>
+        </form>
+      </div>
+
+      <div id="success-view" class="view hidden">
+        <div class="success-icon">
+          <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+        </div>
+        <h2>Password Setup Complete!</h2>
+        <p class="success-desc">Save this <strong>Emergency Recovery Key</strong> in a safe offline place. It is the only way to reset your master password if you forget it.</p>
+        <div class="recovery-box">
+          <code id="recovery-key-display" class="recovery-code">----</code>
+          <button type="button" id="btn-copy-recovery" class="btn-secondary">Copy Recovery Key</button>
+        </div>
+        <button id="btn-open-instagram" class="btn-primary">Go to Instagram Web</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="setup.js"></script>
+</body>
+</html>

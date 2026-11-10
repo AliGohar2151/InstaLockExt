@@ -1,0 +1,25 @@
+# AI / Agent Orchestration Artifacts
+.agents/
+
+# Extension Packaging & Keys
+*.crx
+*.pem
+*.zip
+
+# Dependencies & Logs
+node_modules/
+*.log
+npm-debug.log*
+
+# Environment Files
+.env
+.env.*
+
+# OS & Editor Metadata
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+*.swp
+*.swo

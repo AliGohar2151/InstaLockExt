@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Instagram Lock - Cryptographic Verification Suite</title>
+  <style>
+    body {
+      background: #121212;
+      color: #f0f0f0;
+      font-family: monospace;
+      padding: 30px;
+    }
+    h1 { color: #e1306c; margin-bottom: 20px; font-size: 20px; }
+    .log-item {
+      padding: 6px 10px;
+      margin-bottom: 4px;
+      border-radius: 4px;
+      font-size: 13px;
+    }
+    .pass { background: rgba(82, 196, 26, 0.15); color: #52c41a; }
+    .fail { background: rgba(255, 77, 79, 0.2); color: #ff7875; }
+    .summary { margin-top: 20px; font-weight: bold; font-size: 15px; }
+  </style>
+</head>
+<body>
+  <h1>Instagram Lock - Web Crypto In-Browser Test Suite</h1>
+  <div id="logs"></div>
+  <div id="summary" class="summary">Running tests...</div>
+
+  <script type="module">
+    import {
+      generateSaltHex,
+      generateRecoveryKey,
+      hashPassword,
+      verifyPassword,
+      timingSafeEqual,
+      bufferToHex,
+      hexToBuffer
+    } from '../shared/crypto.js';
+    import { CRYPTO_CONFIG, PASSWORD_POLICY } from '../shared/constants.js';
+
+    const logsContainer = document.getElementById('logs');
+    const summary = document.getElementById('summary');
+    let total = 0;
+    let passed = 0;
+
+    function log(condition, desc) {
+      total++;
+      const div = document.createElement('div');
+      div.className = 'log-item ' + (condition ? 'pass' : 'fail');
+      div.textContent = (condition ? '✅ PASS: ' : '❌ FAIL: ') + desc;
+      logsContainer.appendChild(div);
+      if (condition) passed++;
+    }
+
+    async function run() {
+      // Test 1: Buffer <-> Hex (preserving leading zeroes)
+      const arr = new Uint8Array([0, 15, 255, 128, 42]);
+      const hex = bufferToHex(arr);
+      log(hex === '000fff802a', 'bufferToHex preserves leading zeroes correctly');
+      const roundTrip = hexToBuffer(hex);
+      log(roundTrip.length === arr.length && roundTrip.every((b, i) => b === arr[i]), 'hexToBuffer roundtrip restores bytes');
+
+      // Test 2: Salt generation
+      const salt1 = generateSaltHex(16);
+      const salt2 = generateSaltHex(16);
+      log(salt1.length === 32, 'Salt length is 32 hex chars');
+      log(salt1 !== salt2, 'Two generated salts are cryptographically distinct');
+
+      // Test 3: Recovery key generation
+      const rec1 = generateRecoveryKey();
+      const rec2 = generateRecoveryKey();
+      log(/^[2-9A-HJ-NP-Z]{4}(-[2-9A-HJ-NP-Z]{4}){3}$/.test(rec1), 'Recovery key format valid');
+      log(rec1 !== rec2, 'Consecutive recovery keys are distinct');
+
+      // Test 4: PBKDF2 Password Hashing (600,000 iterations)
+      const password = 'TestSecretPassword_2026!';
+      const salt = generateSaltHex(16);
+      const hash = await hashPassword(password, salt, CRYPTO_CONFIG.ITERATIONS);
+      log(typeof hash === 'string' && hash.length === 64, 'Hash is 64 hex chars (256-bit SHA-256)');
+
+      // Test 5: Verification & tampered salt rejection
+      const valid = await verifyPassword(password, salt, hash, CRYPTO_CONFIG.ITERATIONS);
+      log(valid === true, 'verifyPassword returns true for matching password');
+
+      const invalid = await verifyPassword('WrongPassword123', salt, hash, CRYPTO_CONFIG.ITERATIONS);
+      log(invalid === false, 'verifyPassword returns false for non-matching password');
+
+      const tampered = await verifyPassword(password, generateSaltHex(16), hash, CRYPTO_CONFIG.ITERATIONS);
+      log(tampered === false, 'verifyPassword returns false with wrong salt');
+
+      // Test 6: Legacy 100k backward compatibility
+      const legacyHash = await hashPassword(password, salt, CRYPTO_CONFIG.LEGACY_ITERATIONS);
+      log(await verifyPassword(password, salt, legacyHash, CRYPTO_CONFIG.LEGACY_ITERATIONS) === true, 'verifyPassword supports legacy 100k iterations');
+
+      // Test 7: Timing Safe Equal
+      log(timingSafeEqual('hash123', 'hash123') === true, 'timingSafeEqual matches identical strings');
+      log(timingSafeEqual('hash123', 'hash124') === false, 'timingSafeEqual rejects differing strings');
+      log(timingSafeEqual('abc', 'abcdef') === false, 'timingSafeEqual rejects differing string lengths');
+
+      // Test 8: Empty & oversized validation
+      let caughtEmpty = false;
+      try { await hashPassword('', salt); } catch { caughtEmpty = true; }
+      log(caughtEmpty === true, 'hashPassword rejects empty password');
+
+      let caughtOver = false;
+      try { await hashPassword('a'.repeat(PASSWORD_POLICY.MAX_LENGTH + 1), salt); } catch { caughtOver = true; }
+      log(caughtOver === true, 'hashPassword rejects oversized password (>128 chars)');
+
+      summary.textContent = `Completed: ${passed}/${total} tests passed successfully.`;
+      summary.style.color = passed === total ? '#52c41a' : '#ff7875';
+    }
+
+    run().catch(err => {
+      summary.textContent = 'Suite crashed: ' + err.message;
+      summary.style.color = '#ff7875';
+    });
+  </script>
+</body>
+</html>

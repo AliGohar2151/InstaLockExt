@@ -1,0 +1,56 @@
+{
+  "manifest_version": 3,
+  "name": "Instagram Lock - Password Protection",
+  "version": "1.1.0",
+  "description": "Password-protect your Instagram Web session with automatic inactivity locking and multi-tab synchronization.",
+  "icons": {
+    "16": "icons/icon-16.png",
+    "48": "icons/icon-48.png",
+    "128": "icons/icon-128.png"
+  },
+  "incognito": "split",
+  "permissions": [
+    "storage",
+    "alarms",
+    "idle"
+  ],
+  "host_permissions": [
+    "https://*.instagram.com/*"
+  ],
+  "background": {
+    "service_worker": "background/service-worker.js",
+    "type": "module"
+  },
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_icon": {
+      "16": "icons/icon-16.png",
+      "48": "icons/icon-48.png",
+      "128": "icons/icon-128.png"
+    },
+    "default_title": "Instagram Lock"
+  },
+  "commands": {
+    "quick-lock": {
+      "suggested_key": {
+        "default": "Alt+Shift+L",
+        "mac": "Alt+Shift+L"
+      },
+      "description": "Lock all Instagram tabs immediately"
+    }
+  },
+  "options_page": "options/options.html",
+  "content_scripts": [
+    {
+      "matches": [
+        "https://*.instagram.com/*"
+      ],
+      "js": [
+        "content/content-loader.js",
+        "content/content-bundle.js"
+      ],
+      "run_at": "document_start",
+      "all_frames": true
+    }
+  ]
+}

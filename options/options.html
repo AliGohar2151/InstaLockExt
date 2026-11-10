@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Settings - Instagram Lock</title>
+  <link rel="stylesheet" href="options.css">
+</head>
+<body>
+  <div class="options-layout">
+    <!-- Header -->
+    <header class="options-header">
+      <div class="brand">
+        <div class="brand-icon">
+          <svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
+        </div>
+        <div>
+          <h1>Instagram Lock Settings</h1>
+          <p class="subtitle">Configure protection scope, timeout rules, password security, and recovery options.</p>
+        </div>
+      </div>
+      <div id="autosave-toast" class="autosave-toast hidden" role="status" aria-live="polite">Saved</div>
+    </header>
+
+    <main class="options-content">
+      <!-- Section: Locking & Protection Preferences -->
+      <section class="card">
+        <h2 class="card-title">Locking & Protection Behavior</h2>
+        <p class="card-desc">Changes save automatically. Use <strong>Alt+Shift+L</strong> anytime to lock all Instagram tabs instantly.</p>
+
+        <div class="setting-row">
+          <div class="setting-info">
+            <span class="setting-label">Protection Mode</span>
+            <span class="setting-hint">Choose whether to lock all of Instagram or only specific sections</span>
+          </div>
+          <select id="select-lock-scope" class="select-input">
+            <option value="full">Full Site Lock (Default)</option>
+            <option value="reels_explore">Reels &amp; Explore Blocker</option>
+            <option value="dms">Direct Messages (DM) Privacy</option>
+          </select>
+        </div>
+
+        <div class="setting-row">
+          <div class="setting-info">
+            <span class="setting-label">Enable Auto-Lock</span>
+            <span class="setting-hint">Automatically lock all open Instagram tabs when inactive</span>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="toggle-autolock">
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <div class="setting-row">
+          <div class="setting-info">
+            <span class="setting-label">Lock When Instagram Closes (Lock on Reopen)</span>
+            <span class="setting-hint">Automatically lock the session whenever Instagram is closed, requiring your password every time you reopen Instagram on any tab</span>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="toggle-lock-on-close">
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <div class="setting-row" id="row-timeout">
+          <div class="setting-info">
+            <span class="setting-label">Inactivity Timeout</span>
+            <span class="setting-hint">Time before Instagram locks after no mouse, scroll, or keyboard input</span>
+          </div>
+          <select id="select-timeout" class="select-input">
+            <option value="1">1 minute</option>
+            <option value="5">5 minutes (Default)</option>
+            <option value="10">10 minutes</option>
+            <option value="15">15 minutes</option>
+            <option value="30">30 minutes</option>
+            <option value="0">Never</option>
+          </select>
+        </div>
+
+        <div class="setting-row">
+          <div class="setting-info">
+            <span class="setting-label">Lock Screen Theme</span>
+            <span class="setting-hint">Match Instagram / system color scheme or force Dark/Light overlay</span>
+          </div>
+          <select id="select-theme-mode" class="select-input">
+            <option value="auto">Auto (Match System/IG)</option>
+            <option value="dark">Dark</option>
+            <option value="light">Light</option>
+          </select>
+        </div>
+      </section>
+
+      <!-- Section: Change Password -->
+      <section class="card">
+        <h2 class="card-title">Change Master Password</h2>
+        <p class="card-desc">Update your master password (minimum 8 characters, mixed types). Current password required.</p>
+
+        <form id="change-pw-form" class="pw-form" novalidate>
+          <div class="form-group">
+            <label for="current-password">Current Password</label>
+            <div class="input-wrapper">
+              <input type="password" id="current-password" class="text-input" placeholder="Enter current password" maxlength="128" required autocomplete="current-password">
+              <button type="button" class="btn-toggle-eye" data-target="current-password" aria-label="Toggle current password visibility" aria-pressed="false">
+                <svg viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="new-password">New Password</label>
+            <div class="input-wrapper">
+              <input type="password" id="new-password" class="text-input" placeholder="Min 8 chars, letters & numbers/symbols" maxlength="128" required autocomplete="new-password">
+              <button type="button" class="btn-toggle-eye" data-target="new-password" aria-label="Toggle new password visibility" aria-pressed="false">
+                <svg viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+              </button>
+            </div>
+            <div class="strength-meter">
+              <div class="meter-bar"><div id="strength-fill" class="meter-fill"></div></div>
+              <span id="strength-label" class="strength-text">Password strength</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="confirm-new-password">Confirm New Password</label>
+            <div class="input-wrapper">
+              <input type="password" id="confirm-new-password" class="text-input" placeholder="Confirm new password" maxlength="128" required autocomplete="new-password">
+              <button type="button" class="btn-toggle-eye" data-target="confirm-new-password" aria-label="Toggle confirm password visibility" aria-pressed="false">
+                <svg viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <div id="change-pw-error" class="error-box hidden" role="alert" aria-live="polite"></div>
+          <div id="change-pw-success" class="success-box hidden" role="status" aria-live="polite">Password updated successfully.</div>
+
+          <div class="card-action">
+            <button type="submit" id="btn-change-pw" class="btn-primary">Update Password</button>
+          </div>
+        </form>
+      </section>
+
+      <!-- Section: Emergency Recovery Key -->
+      <section class="card">
+        <h2 class="card-title">Emergency Recovery Key</h2>
+        <p class="card-desc">If you lost your original recovery key, verify your current password to generate a new one. Regenerating invalidates any previous key.</p>
+
+        <form id="recovery-gen-form" class="pw-form" novalidate>
+          <div class="form-group">
+            <label for="rec-current-pw">Current Master Password</label>
+            <input type="password" id="rec-current-pw" class="text-input" placeholder="Enter current password" maxlength="128" required autocomplete="current-password">
+          </div>
+          <div id="rec-gen-error" class="error-box hidden" role="alert"></div>
+          <div id="rec-gen-result" class="recovery-result hidden">
+            <span class="rec-label">New Recovery Key (save offline):</span>
+            <code id="rec-gen-code" class="rec-code"></code>
+            <button type="button" id="btn-copy-new-rec" class="btn-secondary">Copy Key</button>
+          </div>
+          <div class="card-action">
+            <button type="submit" id="btn-gen-rec" class="btn-primary">Regenerate Recovery Key</button>
+          </div>
+        </form>
+      </section>
+
+      <!-- Section: Security Audit Log -->
+      <section class="card">
+        <div class="card-header-row">
+          <div>
+            <h2 class="card-title">Security Activity Log</h2>
+            <p class="card-desc" style="margin-bottom:0;">Recent authentication and lock events stored locally on this device.</p>
+          </div>
+          <button type="button" id="btn-clear-log" class="btn-secondary">Clear Log</button>
+        </div>
+        <div id="audit-log-container" class="audit-log-list">
+          <p class="empty-log">No activity recorded yet.</p>
+        </div>
+      </section>
+
+      <!-- Section: Security Information & Limitations -->
+      <section class="card">
+        <h2 class="card-title">Security &amp; Architecture</h2>
+        <div class="info-grid">
+          <div class="info-item">
+            <h3>OWASP PBKDF2-SHA256</h3>
+            <p>Passwords are never stored in plaintext. They are salted with 128-bit random salts and derived using 600,000 PBKDF2 iterations completely offline.</p>
+          </div>
+          <div class="info-item">
+            <h3>Closed Shadow DOM</h3>
+            <p>The lock screen runs inside a closed Shadow DOM container, isolating your password input from webpage scripts and Instagram styles.</p>
+          </div>
+          <div class="info-item">
+            <h3>Ephemeral Session Storage</h3>
+            <p>Authentication state lives in <code>chrome.storage.session</code> and resets when the browser closes, when you lock your computer, or on timeout.</p>
+          </div>
+          <div class="info-item">
+            <h3>Extension Scope &amp; Boundaries</h3>
+            <p>Like any browser extension, protection does not prevent someone with local computer access from disabling extensions in <code>chrome://extensions</code>. Keep your OS account locked when away.</p>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script type="module" src="options.js"></script>
+</body>
+</html>
